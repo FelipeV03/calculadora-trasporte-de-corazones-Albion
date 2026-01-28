@@ -366,8 +366,16 @@ export function HeartsCalculator() {
           </div>
 
           {/* Footer */}
-          <footer className="mt-8 text-center text-sm text-muted-foreground">
+          <footer className="mt-8 text-center text-sm text-muted-foreground space-y-2">
             <p>Los precios se basan en tus entradas. Mantenlos actualizados para calculos precisos.</p>
+            <div className="pt-4 border-t border-border/30">
+              <p className="text-xs">
+                Hecho con <span className="text-primary">❤</span> por <span className="font-medium">Poguito</span>
+              </p>
+              <p className="text-xs mt-1">
+                © {new Date().getFullYear() > 2025 ? `2025 - ${new Date().getFullYear()}` : "2025"} Todos los derechos reservados
+              </p>
+            </div>
           </footer>
         </div>
       </div>
