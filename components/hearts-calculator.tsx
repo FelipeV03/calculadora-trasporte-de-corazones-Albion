@@ -655,12 +655,12 @@ function ChartCard({
               />
               <defs>
                 <linearGradient id="barGradientBlue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--ring))" />
-                  <stop offset="100%" stopColor="hsl(var(--chart-5))" />
+                  <stop offset="0%" stopColor="#60a5fa" />
+                  <stop offset="100%" stopColor="#3b82f6" />
                 </linearGradient>
                 <linearGradient id="barGradientBest" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--primary))" />
-                  <stop offset="100%" stopColor="hsl(var(--accent))" />
+                  <stop offset="0%" stopColor="#34d399" />
+                  <stop offset="100%" stopColor="#10b981" />
                 </linearGradient>
               </defs>
               <Bar dataKey="price" radius={[4, 4, 0, 0]}>
