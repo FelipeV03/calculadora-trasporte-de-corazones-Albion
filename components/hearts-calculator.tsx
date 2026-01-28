@@ -59,7 +59,8 @@ interface HistoryEntry {
 interface DashboardState {
   targetAmount: number
   currentHearts: number
-  dailyAverageHearts: number
+  profitPerTrip: number
+  marketPrice: number
   activeCityId: string
   cities: CityData[]
   history: HistoryEntry[]
@@ -77,7 +78,8 @@ const defaultCities: CityData[] = [
 const defaultState: DashboardState = {
   targetAmount: 15000000,
   currentHearts: 0,
-  dailyAverageHearts: 10,
+  profitPerTrip: 7,
+  marketPrice: 105000,
   activeCityId: "caerleon",
   cities: defaultCities,
   history: [],
@@ -146,16 +148,18 @@ export function HeartsCalculator() {
     [state.cities]
   )
 
+  const marketPrice = state.marketPrice > 0 ? state.marketPrice : activeCity.price
+  
+  const currentValue = state.currentHearts * marketPrice
+  const silverRemaining = Math.max(0, state.targetAmount - currentValue)
   const heartsNeeded = useMemo(
-    () => (activeCity.price > 0 ? Math.ceil(state.targetAmount / activeCity.price) : 0),
-    [state.targetAmount, activeCity.price]
+    () => (marketPrice > 0 ? Math.ceil(silverRemaining / marketPrice) : 0),
+    [silverRemaining, marketPrice]
   )
 
-  const heartsRemaining = Math.max(0, heartsNeeded - state.currentHearts)
-  const progressPercentage = heartsNeeded > 0 ? Math.min(100, (state.currentHearts / heartsNeeded) * 100) : 0
-  const currentValue = state.currentHearts * activeCity.price
-  const daysToGoal = state.dailyAverageHearts > 0 ? Math.ceil(heartsRemaining / state.dailyAverageHearts) : 0
-  const tripsNeeded = heartsNeeded
+  const heartsRemaining = heartsNeeded
+  const progressPercentage = state.targetAmount > 0 ? Math.min(100, (currentValue / state.targetAmount) * 100) : 0
+  const tripsNeeded = state.profitPerTrip > 0 ? Math.ceil(heartsNeeded / state.profitPerTrip) : 0
 
   const chartData = useMemo(
     () =>
@@ -302,7 +306,6 @@ export function HeartsCalculator() {
                   heartsRemaining={heartsRemaining}
                   progressPercentage={progressPercentage}
                   currentValue={currentValue}
-                  daysToGoal={daysToGoal}
                   tripsNeeded={tripsNeeded}
                   updateField={updateField}
                 />
@@ -340,7 +343,6 @@ export function HeartsCalculator() {
               heartsRemaining={heartsRemaining}
               progressPercentage={progressPercentage}
               currentValue={currentValue}
-              daysToGoal={daysToGoal}
               tripsNeeded={tripsNeeded}
               updateField={updateField}
             />
@@ -390,7 +392,6 @@ function CalculatorCard({
   heartsRemaining,
   progressPercentage,
   currentValue,
-  daysToGoal,
   tripsNeeded,
   updateField,
 }: {
@@ -400,7 +401,6 @@ function CalculatorCard({
   heartsRemaining: number
   progressPercentage: number
   currentValue: number
-  daysToGoal: number
   tripsNeeded: number
   updateField: (field: keyof DashboardState, value: number) => void
 }) {
@@ -448,16 +448,31 @@ function CalculatorCard({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="dailyAverage" className="flex items-center gap-2 text-foreground text-sm">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            Promedio Diario de Corazones
+          <Label htmlFor="profitPerTrip" className="flex items-center gap-2 text-foreground text-sm">
+            <Heart className="h-4 w-4 text-accent" />
+            Corazones de Ganancia por Viaje
           </Label>
           <Input
-            id="dailyAverage"
+            id="profitPerTrip"
             type="number"
-            value={state.dailyAverageHearts || ""}
-            onChange={(e) => updateField("dailyAverageHearts", Number(e.target.value))}
-            placeholder="10"
+            value={state.profitPerTrip || ""}
+            onChange={(e) => updateField("profitPerTrip", Number(e.target.value))}
+            placeholder="7"
+            className="bg-input border-border text-foreground placeholder:text-muted-foreground h-11"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="marketPrice" className="flex items-center gap-2 text-foreground text-sm">
+            <DollarSign className="h-4 w-4 text-ring" />
+            Precio por Unidad (SILVER)
+          </Label>
+          <Input
+            id="marketPrice"
+            type="number"
+            value={state.marketPrice || ""}
+            onChange={(e) => updateField("marketPrice", Number(e.target.value))}
+            placeholder="105000"
             className="bg-input border-border text-foreground placeholder:text-muted-foreground h-11"
           />
         </div>
@@ -465,17 +480,28 @@ function CalculatorCard({
         {/* Resultados */}
         <div className="pt-4 border-t border-border space-y-4">
           <div className="text-center">
-            <p className="text-sm text-muted-foreground mb-1">Corazones Necesarios (Viajes)</p>
+            <p className="text-sm text-muted-foreground mb-1">Corazones Necesarios</p>
             <div className="flex items-center justify-center gap-2">
               <Heart className="h-7 w-7 text-primary fill-primary" />
-              <span className="text-4xl font-bold text-foreground">{formatNumber(tripsNeeded)}</span>
+              <span className="text-4xl font-bold text-foreground">{formatNumber(heartsNeeded)}</span>
             </div>
-            {heartsRemaining > 0 && (
-              <p className="text-muted-foreground mt-1 text-sm">
-                <span className="text-primary font-semibold">{formatNumber(heartsRemaining)}</span> restantes
-              </p>
-            )}
+            <p className="text-muted-foreground mt-1 text-sm">
+              Total corazones para vender
+            </p>
           </div>
+
+          {tripsNeeded > 0 && (
+            <div className="text-center p-4 rounded-lg bg-accent/10 border border-accent/30">
+              <p className="text-sm text-muted-foreground mb-1">Viajes Restantes</p>
+              <div className="flex items-center justify-center gap-2">
+                <Target className="h-6 w-6 text-accent" />
+                <span className="text-3xl font-bold text-accent">{formatNumber(tripsNeeded)}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                El número más importante
+              </p>
+            </div>
+          )}
 
           {/* Progreso */}
           <div className="space-y-2">
@@ -489,20 +515,6 @@ function CalculatorCard({
               <span>{formatCurrency(state.targetAmount)}</span>
             </div>
           </div>
-
-          {/* Estadisticas */}
-          {daysToGoal > 0 && heartsRemaining > 0 && (
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-lg bg-secondary/50 border border-border">
-                <p className="text-xs text-muted-foreground">Dias Estimados</p>
-                <p className="text-xl font-bold text-foreground">{formatNumber(daysToGoal)}</p>
-              </div>
-              <div className="p-3 rounded-lg bg-accent/10 border border-accent/30">
-                <p className="text-xs text-muted-foreground">Valor Actual</p>
-                <p className="text-xl font-bold text-accent">{formatCurrency(currentValue)}</p>
-              </div>
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>
