@@ -412,7 +412,7 @@ function CalculatorCard({
         <div className="space-y-2">
           <Label htmlFor="targetAmount" className="flex items-center gap-2 text-foreground text-sm">
             <DollarSign className="h-4 w-4 text-accent" />
-            Meta Objetivo
+            Meta Objetivo (SILVER)
           </Label>
           <Input
             id="targetAmount"
