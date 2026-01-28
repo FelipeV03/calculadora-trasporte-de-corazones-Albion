@@ -627,12 +627,15 @@ function ChartCard({
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 20 }}>
               <XAxis
                 dataKey="name"
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
                 axisLine={false}
                 tickLine={false}
+                angle={-45}
+                textAnchor="end"
+                height={40}
               />
               <YAxis
                 tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
