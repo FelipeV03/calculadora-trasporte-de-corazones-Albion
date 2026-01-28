@@ -8,9 +8,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Hearts Calculator - Track Your Goals',
-  description: 'Calculate hearts needed to reach your monetary goals and track your progress',
-  generator: 'v0.app',
+  title: 'Calculadora de corazones: sigue tus objetivos',
+  description: 'Calcula los corazones necesarios para alcanzar tus objetivos monetarios y realiza un seguimiento de tu progreso.',
+  // generator: 'v0.app',
   // icons: {
   //   icon: [
   //     {
