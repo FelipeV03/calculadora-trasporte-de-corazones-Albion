@@ -46,6 +46,7 @@ interface CityData {
   name: string
   price: number
   priceHistory: { price: number; timestamp: string }[]
+  placeholder?: string
 }
 
 interface HistoryEntry {
@@ -67,19 +68,19 @@ interface DashboardState {
 }
 
 const defaultCities: CityData[] = [
-  { id: "fort-sterling", name: "Fort Sterling", price: 95000, priceHistory: [] },
-  { id: "thetford", name: "Thetford", price: 92000, priceHistory: [] },
-  { id: "martlock", name: "Martlock", price: 98000, priceHistory: [] },
-  { id: "caerleon", name: "Caerleon", price: 105000, priceHistory: [] },
-  { id: "bridgewatch", name: "Bridgewatch", price: 97000, priceHistory: [] },
-  { id: "lymhurst", name: "Lymhurst", price: 94000, priceHistory: [] },
+  { id: "fort-sterling", name: "Fort Sterling", price: 0, priceHistory: [], placeholder: "35000" },
+  { id: "thetford", name: "Thetford", price: 0, priceHistory: [], placeholder: "46000" },
+  { id: "martlock", name: "Martlock", price: 0, priceHistory: [], placeholder: "44000" },
+  { id: "caerleon", name: "Caerleon", price: 0, priceHistory: [], placeholder: "49000" },
+  { id: "bridgewatch", name: "Bridgewatch", price: 0, priceHistory: [], placeholder: "44000" },
+  { id: "lymhurst", name: "Lymhurst", price: 0, priceHistory: [], placeholder: "43000" },
 ]
 
 const defaultState: DashboardState = {
-  targetAmount: 15000000,
+  targetAmount: 0,
   currentHearts: 0,
-  profitPerTrip: 7,
-  marketPrice: 105000,
+  profitPerTrip: 0,
+  marketPrice: 0,
   activeCityId: "caerleon",
   cities: defaultCities,
   history: [],
@@ -597,9 +598,10 @@ function CityPricesCard({
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
-                  value={city.price || ""}
-                  onChange={(e) => updateCityPrice(city.id, Number(e.target.value))}
-                  className="bg-input border-border text-foreground h-9 text-sm flex-1"
+                  value={city.price === 0 ? "" : city.price}
+                  onChange={(e) => updateCityPrice(city.id, Number(e.target.value) || 0)}
+                  placeholder={city.placeholder}
+                  className="bg-input border-border text-foreground placeholder:text-muted-foreground h-9 text-sm flex-1"
                 />
                 <Tooltip>
                   <TooltipTrigger asChild>
