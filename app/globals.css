@@ -123,3 +123,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Confetti Animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti {
+  animation: confetti-fall linear forwards;
+}
