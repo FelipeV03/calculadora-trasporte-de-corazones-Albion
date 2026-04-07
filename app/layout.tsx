@@ -8,8 +8,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Calculadora de corazones: sigue tus objetivos',
-  description: 'Calcula los corazones necesarios para alcanzar tus objetivos monetarios y realiza un seguimiento de tu progreso.',
+  title: 'Albion Tools',
+  description: 'Herramientas para la comunidad de Albion Online: corazones, precios, crafteo, refinamiento y más.',
   // generator: 'v0.app',
   // icons: {
   //   icon: [
@@ -36,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={`font-sans antialiased`}>
         {children}
         <Analytics />
