@@ -5,6 +5,18 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "render.albiononline.com",
+        pathname: "/v1/item/**",
+      },
+      {
+        protocol: "https",
+        hostname: "render.albiononline.com",
+        pathname: "/v1/spell/**",
+      },
+    ],
   },
 }
 

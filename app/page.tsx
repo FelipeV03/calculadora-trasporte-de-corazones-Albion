@@ -1,5 +1,5 @@
-import { HeartsCalculator } from "@/components/hearts-calculator"
+import { AlbionHub } from "@/components/albion-hub"
 
 export default function Page() {
-  return <HeartsCalculator />
+  return <AlbionHub />
 }
